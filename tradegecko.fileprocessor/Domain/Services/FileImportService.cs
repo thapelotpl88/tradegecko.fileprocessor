@@ -18,6 +18,7 @@ namespace tradegecko.fileprocessor.Domain.Services
             _config = config;
         }
 
+        //  Upload file to Azure Blob Storage
         public async Task UploadFileAsync(Stream file, string fileFullPath)
 		{
             CloudStorageAccount cloudStorage = null;
@@ -25,7 +26,7 @@ namespace tradegecko.fileprocessor.Domain.Services
             {
                 CloudBlobClient cloudBlobClient = cloudStorage.CreateCloudBlobClient();
                 CloudBlobContainer cloudBlobContainer = cloudBlobClient.GetContainerReference(_config["AzureBlob:BlobContainerName"]);
-                CloudBlockBlob cloudBlockBlob = cloudBlobContainer.GetBlockBlobReference(fileFullPath);
+                CloudBlockBlob cloudBlockBlob = cloudBlobContainer.GetBlockBlobReference($"tradegecko/{fileFullPath}");
                 await cloudBlockBlob.UploadFromStreamAsync(file);
             }
         }
