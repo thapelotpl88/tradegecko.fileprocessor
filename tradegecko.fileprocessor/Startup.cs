@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using tradegecko.fileprocessor.Domain.Services;
 
 namespace tradegecko.fileprocessor
 {
@@ -33,7 +34,9 @@ namespace tradegecko.fileprocessor
 
 
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-		}
+            services.AddScoped<IFileService, FileService>();
+            services.AddScoped<IObjectStateService, ObjectStateService>();
+        }
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
 		public void Configure(IApplicationBuilder app, IHostingEnvironment env)

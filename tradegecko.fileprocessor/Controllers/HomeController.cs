@@ -13,11 +13,11 @@ namespace tradegecko.fileprocessor.Controllers
 {
 	public class HomeController : Controller
 	{
-		private readonly IFileImportService _fileImportService;
+		private readonly IFileService _fileService;
 
-		public HomeController(IFileImportService fileImportService)
+		public HomeController(IFileService fileService)
 		{
-			_fileImportService = fileImportService;
+			_fileService = fileService;
 		}
 		public IActionResult Index()
 		{
@@ -50,12 +50,9 @@ namespace tradegecko.fileprocessor.Controllers
 			{
 				using (var stream = formFile.OpenReadStream())
 				{
-					await _fileImportService.UploadFileAsync(stream, formFile.FileName);
+					await _fileService.UploadFileAsync(stream, formFile.FileName);
 				}
 			}
-
-			// process up000loaded files
-			// Don't rely on or trust the FileName property without validation.
 
 			return Ok(new { count = files.Count, filePaths });
 		}
