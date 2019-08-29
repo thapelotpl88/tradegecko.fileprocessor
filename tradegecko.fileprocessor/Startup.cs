@@ -7,8 +7,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using tradegecko.fileprocessor.Domain.Entities;
 using tradegecko.fileprocessor.Domain.Services;
 
 namespace tradegecko.fileprocessor
@@ -32,8 +34,10 @@ namespace tradegecko.fileprocessor
 				options.MinimumSameSitePolicy = SameSiteMode.None;
 			});
 
-
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddDbContext<TradegeckoDbContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("Tradegecko")));
+            services.AddScoped<IFileImportProcessor, FileImportProcessor>();
             services.AddScoped<IFileService, FileService>();
             services.AddScoped<IObjectStateService, ObjectStateService>();
         }

@@ -11,6 +11,8 @@ namespace tradegecko.fileprocessor.Domain.Services
 {
 	public class FileService : IFileService
 	{
+        private static string _azurePath = "tradegecko";
+
         private IConfiguration _config;
 
         public FileService(IConfiguration config)
@@ -25,7 +27,7 @@ namespace tradegecko.fileprocessor.Domain.Services
             {
                 CloudBlobClient cloudBlobClient = cloudStorage.CreateCloudBlobClient();
                 CloudBlobContainer cloudBlobContainer = cloudBlobClient.GetContainerReference(_config["AzureBlob:BlobContainerName"]);
-                CloudBlockBlob cloudBlockBlob = cloudBlobContainer.GetBlockBlobReference(fileFullPath);
+                CloudBlockBlob cloudBlockBlob = cloudBlobContainer.GetBlockBlobReference($"{_azurePath}/{fileFullPath}");
                 await cloudBlockBlob.DeleteAsync();
             }
         }
@@ -38,13 +40,12 @@ namespace tradegecko.fileprocessor.Domain.Services
             {
                 CloudBlobClient cloudBlobClient = cloudStorage.CreateCloudBlobClient();
                 CloudBlobContainer cloudBlobContainer = cloudBlobClient.GetContainerReference(_config["AzureBlob:BlobContainerName"]);
-                CloudBlockBlob cloudBlockBlob = cloudBlobContainer.GetBlockBlobReference(fullFilePath);
+                CloudBlockBlob cloudBlockBlob = cloudBlobContainer.GetBlockBlobReference($"{_azurePath}/{fullFilePath}");
                 await cloudBlockBlob.DownloadToStreamAsync(ms);
             }
             return ms;
         }
 
-        //  Upload file to Azure Blob Storage
         public async Task UploadFileAsync(Stream file, string fileFullPath)
 		{
             CloudStorageAccount cloudStorage = null;
@@ -52,7 +53,7 @@ namespace tradegecko.fileprocessor.Domain.Services
             {
                 CloudBlobClient cloudBlobClient = cloudStorage.CreateCloudBlobClient();
                 CloudBlobContainer cloudBlobContainer = cloudBlobClient.GetContainerReference(_config["AzureBlob:BlobContainerName"]);
-                CloudBlockBlob cloudBlockBlob = cloudBlobContainer.GetBlockBlobReference($"tradegecko/{fileFullPath}");
+                CloudBlockBlob cloudBlockBlob = cloudBlobContainer.GetBlockBlobReference($"{_azurePath}/{fileFullPath}");
                 await cloudBlockBlob.UploadFromStreamAsync(file);
             }
         }

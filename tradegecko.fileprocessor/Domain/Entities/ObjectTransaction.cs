@@ -8,7 +8,7 @@ namespace tradegecko.fileprocessor.Domain.Entities
         public int TransactionId { get; set; }
         public int ObjectId { get; set; }
         public string ObjectType { get; set; }
-        public byte[] Timestamp { get; set; }
+        public DateTime Timestamp { get; set; }
         public string ObjectChanges { get; set; }
     }
 }

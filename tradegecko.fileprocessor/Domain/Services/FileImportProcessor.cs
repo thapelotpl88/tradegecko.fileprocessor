@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using tradegecko.fileprocessor.Domain.Entities;
+using tradegecko.fileprocessor.Domain.Helpers;
 
 namespace tradegecko.fileprocessor.Domain.Services
 {
@@ -19,15 +21,32 @@ namespace tradegecko.fileprocessor.Domain.Services
 
         public async Task ProcessObjectStateFile(Stream stream, string fileName)
         {
-            // await _fileService.UploadFileAsync(stream, fileName);
-            using (TextReader tr = new StreamReader(stream))
+            await _fileService.UploadFileAsync(stream, fileName);
+            var dataStream = await _fileService.GetFileAsync(fileName);
+            var entities = new List<ObjectTransaction>();
+            dataStream.Seek(0, SeekOrigin.Begin); ;
+            using (var streamReader = new StreamReader(dataStream))
             {
-                while (tr.Peek() >= 0)
+                int lineIndex = 0;
+                string[] columnNames = null;
+                while (!streamReader.EndOfStream)
                 {
-                   var strLine = await tr.ReadLineAsync();
+                    var strLine = await streamReader.ReadLineAsync();
+                    if (lineIndex == 0)
+                    {
+                        columnNames = strLine.Split(',');
+                        lineIndex = 1;
+                    }
+                    else
+                    {
+                        entities.Add(CSVDataHelper.GetObjectTransactionFromString(columnNames, CSVDataHelper.SplitCSV(strLine)));
+                    }
                 }
             }
 
+            await _objectStateService.AddObjectTransactionsAsync(entities);
+
+            await _fileService.DeleteFileAsync(fileName);
         }
     }
 }
