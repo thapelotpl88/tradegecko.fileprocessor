@@ -22,20 +22,22 @@ namespace tradegecko.fileprocessor.Domain.Services
         public async Task ProcessObjectStateFile(Stream stream, string fileName)
         {
             await _fileService.UploadFileAsync(stream, fileName);
+
             var dataStream = await _fileService.GetFileAsync(fileName);
+
             var entities = new List<ObjectTransaction>();
-            dataStream.Seek(0, SeekOrigin.Begin); ;
+            dataStream.Seek(0, SeekOrigin.Begin);
+
             using (var streamReader = new StreamReader(dataStream))
             {
-                int lineIndex = 0;
+    
                 string[] columnNames = null;
                 while (!streamReader.EndOfStream)
                 {
                     var strLine = await streamReader.ReadLineAsync();
-                    if (lineIndex == 0)
+                    if (columnNames == null)
                     {
                         columnNames = strLine.Split(',');
-                        lineIndex = 1;
                     }
                     else
                     {

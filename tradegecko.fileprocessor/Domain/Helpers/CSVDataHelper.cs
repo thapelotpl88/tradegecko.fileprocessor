@@ -22,25 +22,19 @@ namespace tradegecko.fileprocessor.Domain.Helpers
             return dataObj;
         }
 
-        static Regex csvSplit = new Regex("(?:^|,)(\"(?:[^\"]+|\"\")*\"|[^,]*)", RegexOptions.Compiled);
+        static Regex csvSplit = new Regex(string.Format("((?<=\")[^\"]*(?=\"({0}|$)+)|(?<={0}|^)[^{0}\"]*(?={0}|$))", ","), RegexOptions.Compiled);
 
-        public static string[] SplitCSV(string input)
+        public static string[] SplitCSV(string inputStr)
         {
+            string[] seps = { "\",", ",\"" };
+            char[] quotes = { '\"', ' ' };
 
-            List<string> list = new List<string>();
-            string curr = null;
-            foreach (Match match in csvSplit.Matches(input))
-            {
-                curr = match.Value;
-                if (0 == curr.Length)
-                {
-                    list.Add("");
-                }
+            var fields = inputStr
+            .Split(',', 4, StringSplitOptions.None)
+            .Select(s => s.Trim(quotes).Replace("\\\"", "\""))
+            .ToArray();
 
-                list.Add(curr.TrimStart(','));
-            }
-
-            return list.ToArray();
+            return fields.ToArray();
         }
 
         private static void MapPropertyData(string columnName, string columnData, ObjectTransaction dataObj)

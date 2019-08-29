@@ -13,12 +13,6 @@ namespace tradegecko.fileprocessor.Controllers
 {
 	public class HomeController : Controller
 	{
-		private readonly IFileImportProcessor _fileImportProcessor;
-
-		public HomeController(IFileImportProcessor fileImportProcessor)
-		{
-            _fileImportProcessor = fileImportProcessor;
-		}
 		public IActionResult Index()
 		{
 			return View();
@@ -40,21 +34,5 @@ namespace tradegecko.fileprocessor.Controllers
 			return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
 		}
 
-		[HttpPost]
-		public async Task<IActionResult> FileUploadSave(List<IFormFile> files)
-		{
-			var filePaths = new List<string>();
-
-			var formFile = files[0];
-			if (formFile.Length > 0)
-			{
-				using (var stream = formFile.OpenReadStream())
-				{
-					await _fileImportProcessor.ProcessObjectStateFile(stream, formFile.FileName);
-				}
-			}
-
-			return Ok(new { count = files.Count, filePaths });
-		}
 	}
 }

@@ -22,7 +22,7 @@ namespace tradegecko.fileprocessor.Domain.Entities
             if (!optionsBuilder.IsConfigured)
             {
                 optionsBuilder.UseSqlServer("name=Tradegecko");
-			}
+            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -49,9 +49,8 @@ namespace tradegecko.fileprocessor.Domain.Entities
                     .HasMaxLength(50);
 
                 entity.Property(e => e.Timestamp)
-                    .IsRequired()
                     .HasColumnName("timestamp")
-                    .IsRowVersion();
+                    .HasColumnType("datetime");
             });
         }
     }
