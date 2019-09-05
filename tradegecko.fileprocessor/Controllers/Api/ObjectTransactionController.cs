@@ -24,7 +24,7 @@ namespace tradegecko.fileprocessor.Controllers.Api
         [HttpPost]
         public async Task<IActionResult> FileUploadSave(IFormFile file)
         {
-            if (file.Length > 0)
+            if (file != null && file.Length > 0)
             {
                 using (var stream = file.OpenReadStream())
                 {
@@ -33,7 +33,7 @@ namespace tradegecko.fileprocessor.Controllers.Api
             }
             else
             {
-                return BadRequest();
+                return BadRequest("No file to process found in the request....");
             }
 
             return Ok();
@@ -44,14 +44,14 @@ namespace tradegecko.fileprocessor.Controllers.Api
         {
             if (!objectid.HasValue || objectType == null || !timestamp.HasValue)
             {
-                return BadRequest();
+                return BadRequest("No search criteria specified...");
             }
 
             var results = await _objectStateService.GetObjectTransaction(obj => obj.ObjectId == objectid && obj.ObjectType == objectType && obj.Timestamp == timestamp);
 
             if (!results.Any())
             {
-                return NotFound();
+                return NotFound("No results found for the specified search criteria...");
             }
             return Ok(results);
         }

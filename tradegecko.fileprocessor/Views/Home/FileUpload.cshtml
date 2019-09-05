@@ -4,16 +4,29 @@
 }
 
 <h1>File Upload</h1>
-<form method="post" enctype="multipart/form-data">
-	<div class="form-group">
-		<div class="col-md-10">
-			<p>Upload file using this form:</p>
-			<input type="file" name="file" id="file" />
-		</div>
-	</div>
-	<div class="form-group">
-		<div class="col-md-10">
-			<input id="uploadFile" type="button" value="Upload" />
-		</div>
-	</div>
-</form>
+<div id="file_upload_section">
+    <form method="post" enctype="multipart/form-data">
+        <div class="form-group">
+            <div class="col-md-10">
+                <p>Upload file using this form:</p>
+                <input type="file" name="file" id="file" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-10">
+                <input id="uploadFile" type="button" value="Upload" />
+            </div>
+        </div>
+    </form>
+</div>
+
+<div id="upload_success_section" style="display: none;">
+    <h3>File successfully uploaded..... </h3>
+</div>
+
+<div id="error_section" style="display: none;">
+    <h3>Processing Error</h3>
+    <p>Error code ---> <span id="error_code"></span></p>
+    <p>Error Message ---> <span id="error_msg"></span></p>
+    <p>Response Message ---> <span id="res_msg"></span></p>
+</div>
