@@ -48,7 +48,7 @@ namespace tradegecko.fileprocessor.Domain.Helpers
                     SetObjectProperty("ObjectType", dataObj, columnData);
                     break;
                 case "timestamp":
-                    SetObjectTimeProperty("Timestamp", dataObj, columnData);
+                    SetObjectProperty("Timestamp", dataObj, columnData);
                     break;
                 case "object_changes":
                     SetObjectProperty("ObjectChanges", dataObj, columnData);

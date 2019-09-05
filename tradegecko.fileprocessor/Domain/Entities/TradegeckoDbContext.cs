@@ -48,9 +48,7 @@ namespace tradegecko.fileprocessor.Domain.Entities
                     .HasColumnName("object_type")
                     .HasMaxLength(50);
 
-                entity.Property(e => e.Timestamp)
-                    .HasColumnName("timestamp")
-                    .HasColumnType("datetime");
+                entity.Property(e => e.Timestamp).HasColumnName("timestamp");
             });
         }
     }
