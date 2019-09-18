@@ -1,2 +1,2 @@
 # tradegecko.fileprocessor
-[Deplaoyed](http://tradegeckofileprocessor.azurewebsites.net/)
+[File Processor Deployment](http://tradegeckofileprocessor.azurewebsites.net/)
